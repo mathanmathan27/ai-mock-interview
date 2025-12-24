@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Contact & Reviews | AI Mock Interview</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        color: white;
+        min-height: 100vh;
+        margin: 0;
+      }
+
+      .container {
+        max-width: 700px;
+        margin: 70px auto;
+        background: rgba(0, 0, 0, 0.6);
+        padding: 35px;
+        border-radius: 14px;
+        position: relative;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      .desc {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #ddd;
+        font-size: 15px;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        border: none;
+      }
+
+      .stars {
+        font-size: 26px;
+        margin-bottom: 15px;
+        cursor: pointer;
+      }
+
+      .star {
+        color: #555;
+      }
+
+      .star.active {
+        color: gold;
+      }
+
+      button {
+        width: 100%;
+        padding: 14px;
+        border-radius: 8px;
+        border: none;
+        background: #00c6ff;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .review-box {
+        background: rgba(255, 255, 255, 0.08);
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 12px;
+      }
+
+      .section-title {
+        margin-top: 40px;
+        margin-bottom: 10px;
+        text-align: center;
+      }
+
+      /* CLOSE BUTTON */
+      .close-btn {
+        position: fixed;
+        top: 15px;
+        right: 20px;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #00c6ff;
+        color: #020617;
+        font-size: 20px;
+        border: none;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <button class="close-btn" onclick="goHome()">×</button>
+
+    <div class="container">
+      <h1>Contact & Reviews</h1>
+
+      <p class="desc">
+        We value your feedback and questions. Share your experience with the AI
+        Mock Interview or ask anything you want to know — we’ll get back to you.
+      </p>
+
+      <!-- REVIEW FORM -->
+      <form id="reviewForm">
+        <input type="text" id="name" placeholder="Enter your name" required />
+
+        <div class="stars" id="stars">
+          <span class="star" data-value="1">★</span>
+          <span class="star" data-value="2">★</span>
+          <span class="star" data-value="3">★</span>
+          <span class="star" data-value="4">★</span>
+          <span class="star" data-value="5">★</span>
+        </div>
+
+        <textarea
+          id="review"
+          placeholder="Write your review here..."
+          required
+        ></textarea>
+
+        <button type="submit">Submit Review</button>
+      </form>
+
+      <!-- REVIEWS DISPLAY -->
+      <div id="reviews"></div>
+
+      <!-- QUESTION SECTION -->
+      <h2 class="section-title">Ask a Question</h2>
+
+      <form id="questionForm">
+        <input type="text" id="qname" placeholder="Your name" required />
+
+        <textarea
+          id="question"
+          placeholder="Type your question here..."
+          required
+        ></textarea>
+
+        <button type="submit">Send Question</button>
+      </form>
+    </div>
+
+    <script>
+      const stars = document.querySelectorAll(".star");
+      let rating = 0;
+
+      stars.forEach((s) => {
+        s.onclick = () => {
+          rating = s.dataset.value;
+          stars.forEach((st) =>
+            st.classList.toggle("active", st.dataset.value <= rating)
+          );
+        };
+      });
+
+      // REVIEW SUBMIT
+      document.getElementById("reviewForm").onsubmit = function (e) {
+        e.preventDefault();
+
+        const name = document.getElementById("name").value;
+        const reviewText = document.getElementById("review").value;
+
+        const reviewBox = document.createElement("div");
+        reviewBox.className = "review-box";
+        reviewBox.innerHTML = `
+          <strong>${name}</strong><br/>
+          Rating: ${"★".repeat(rating)}<br/>
+          ${reviewText}
+        `;
+
+        document.getElementById("reviews").prepend(reviewBox);
+
+        this.reset();
+        rating = 0;
+        stars.forEach((st) => st.classList.remove("active"));
+      };
+
+      // QUESTION SEND TO GMAIL
+      document.getElementById("questionForm").onsubmit = function (e) {
+        e.preventDefault();
+
+        const name = document.getElementById("qname").value;
+        const question = document.getElementById("question").value;
+
+        const subject = encodeURIComponent("Question from AI Mock Interview");
+        const body = encodeURIComponent(
+          `Name: ${name}\n\nQuestion:\n${question}`
+        );
+
+        window.open(
+          "https://mail.google.com/mail/?view=cm&fs=1&to=mathanvelusamy955@gmail.com&su=" +
+            subject +
+            "&body=" +
+            body,
+          "_blank"
+        );
+
+        this.reset();
+      };
+
+      function goHome() {
+        window.location.href = "/";
+      }
+    </script>
+  </body>
+</html>

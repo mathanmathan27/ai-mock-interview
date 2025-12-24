@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Interview Dashboard</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <h1 style="text-align: center">Interview Dashboard</h1>
+      <p style="text-align: center; color: #555">
+        List of all completed mock interviews
+      </p>
+
+      <div class="results-container">
+        {% if interviews|length == 0 %}
+        <p style="text-align: center; font-size: 18px; margin-top: 30px">
+          No interviews found.
+        </p>
+        {% endif %} {% for item in interviews %}
+        <div class="result-card">
+          <h3>{{ item.name }}</h3>
+
+          <p><strong>Date:</strong> {{ item.date }}</p>
+          <p><strong>Overall Score:</strong> {{ item.score }}/100</p>
+
+          <a href="/report/{{ item.id }}">
+            <button class="download-btn">View Report</button>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+      <script src="{{ url_for('static', filename='effects.js') }}"></script>
+
+      <div class="footer">© AI Mock Interview Assistant</div>
+    </div>
+  </body>
+</html>

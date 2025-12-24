@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Register | AI Mock Interview</title>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+      }
+
+      .register-box {
+        background: #111;
+        padding: 35px;
+        width: 360px;
+        border-radius: 12px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+      }
+
+      h2 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      input {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 6px;
+        border: none;
+        outline: none;
+        font-size: 15px;
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 15px;
+        background: #00bcd4;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #0097a7;
+      }
+
+      .captcha-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 10px;
+        background: #222;
+        padding: 10px;
+        border-radius: 6px;
+      }
+
+      .captcha-text {
+        font-weight: bold;
+        letter-spacing: 2px;
+        color: #00e5ff;
+      }
+
+      .error {
+        background: #ff5252;
+        padding: 10px;
+        border-radius: 6px;
+        margin-bottom: 10px;
+        text-align: center;
+      }
+
+      .login-link {
+        margin-top: 15px;
+        text-align: center;
+      }
+
+      .login-link a {
+        color: #00e5ff;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="register-box">
+      <h2>Create Account</h2>
+
+      {% if error %}
+      <div class="error">{{ error }}</div>
+      {% endif %}
+
+      <form method="POST" onsubmit="return validateCaptcha()">
+        <input type="text" name="username" placeholder="Username" required />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+
+        <!-- CAPTCHA -->
+        <div class="captcha-box">
+          <span class="captcha-text" id="captchaText"></span>
+          <button type="button" onclick="generateCaptcha()">↻</button>
+        </div>
+
+        <input
+          type="text"
+          id="captchaInput"
+          placeholder="Enter CAPTCHA"
+          required
+        />
+
+        <button type="submit">Register</button>
+      </form>
+
+      <div class="login-link">
+        Already have an account?
+        <a href="{{ url_for('login') }}">Login</a>
+      </div>
+    </div>
+
+    <script>
+      let captcha = "";
+
+      function generateCaptcha() {
+        captcha = Math.random().toString(36).substring(2, 8).toUpperCase();
+        document.getElementById("captchaText").innerText = captcha;
+      }
+
+      function validateCaptcha() {
+        const input = document
+          .getElementById("captchaInput")
+          .value.toUpperCase();
+        if (input !== captcha) {
+          alert("CAPTCHA incorrect");
+          generateCaptcha();
+          return false;
+        }
+        return true;
+      }
+
+      // Generate on load
+      generateCaptcha();
+    </script>
+  </body>
+</html>

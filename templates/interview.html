@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AI Mock HR Interview</title>
+
+    <style>
+      :root {
+        --bg-dark: #020617;
+        --bg-light: #f4f6f8;
+        --card-dark: #0f172a;
+        --card-light: #ffffff;
+        --text-dark: #e5e7eb;
+        --text-light: #020617;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background: var(--bg-dark);
+        color: var(--text-dark);
+        padding: 20px;
+        transition: 0.4s;
+      }
+
+      body.light {
+        background: var(--bg-light);
+        color: var(--text-light);
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 25px;
+      }
+
+      .container {
+        display: flex;
+        gap: 30px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .card {
+        background: var(--card-dark);
+        width: 420px;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+        text-align: center;
+      }
+
+      body.light .card {
+        background: var(--card-light);
+      }
+
+      video,
+      img {
+        width: 100%;
+        height: 260px;
+        border-radius: 10px;
+        object-fit: cover;
+      }
+
+      /* 🔥 AI GLOW EFFECT */
+      .ai-speaking {
+        box-shadow: 0 0 25px #00c6ff, 0 0 50px #00c6ff;
+        animation: pulseGlow 1.2s infinite alternate;
+      }
+
+      @keyframes pulseGlow {
+        from {
+          box-shadow: 0 0 15px #00c6ff;
+        }
+        to {
+          box-shadow: 0 0 45px #00c6ff;
+        }
+      }
+
+      #aiQuestion {
+        font-size: 18px;
+        font-weight: bold;
+        min-height: 50px;
+        margin-top: 15px;
+      }
+
+      #userAnswer {
+        font-size: 16px;
+        min-height: 60px;
+        margin-top: 10px;
+        text-align: left;
+      }
+
+      .center {
+        text-align: center;
+        margin-top: 30px;
+      }
+
+      button {
+        padding: 12px 24px;
+        font-size: 16px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin: 8px;
+      }
+
+      #startBtn {
+        background: #6c757d;
+        color: white;
+      }
+
+      #recordBtn {
+        background: #007bff;
+        color: white;
+      }
+
+      #stopBtn {
+        background: #28a745;
+        color: white;
+      }
+
+      button:disabled {
+        background: #aaa;
+        cursor: not-allowed;
+      }
+
+      #recordingIndicator {
+        color: red;
+        font-weight: bold;
+        display: none;
+      }
+
+      .theme-toggle {
+        position: fixed;
+        top: 15px;
+        right: 20px;
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        color: inherit;
+      }
+
+      .close-btn {
+        position: fixed;
+        top: 15px;
+        left: 20px;
+        background: #dc3545;
+        color: #fff;
+        padding: 8px 14px;
+        border-radius: 6px;
+        font-size: 14px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <button class="close-btn" onclick="closeInterview()">✖ Close</button>
+    <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀</button>
+
+    <h1>AI Mock HR Interview</h1>
+
+    <div class="container">
+      <div class="card">
+        <h2>You</h2>
+        <video id="userVideo" autoplay muted playsinline></video>
+        <p id="userAnswer"><strong>Your Answer:</strong></p>
+        <p id="recordingIndicator">Recording...</p>
+      </div>
+
+      <div class="card">
+        <h2>AI Interviewer</h2>
+        <img
+          id="aiImage"
+          src="{{ url_for('static', filename='ai_robot.jpg') }}"
+        />
+        <p id="aiQuestion">Click Start Interview</p>
+      </div>
+    </div>
+
+    <div class="center">
+      <button id="startBtn">Start Interview</button>
+      <button id="recordBtn" disabled>Record</button>
+      <button id="stopBtn" disabled>Stop</button>
+    </div>
+
+    <script>
+      function toggleTheme() {
+        document.body.classList.toggle("light");
+      }
+
+      function closeInterview() {
+        if (stream) stream.getTracks().forEach((t) => t.stop());
+        window.history.back();
+      }
+
+      /* ===== 50 QUESTIONS ===== */
+      const QUESTIONS = [
+        "Tell me about yourself",
+        "What are your strengths?",
+        "What are your weaknesses?",
+        "Why should we hire you?",
+        "Where do you see yourself in five years?",
+        "Describe a challenge you faced",
+        "How do you handle pressure?",
+        "What motivates you?",
+        "Tell me about a failure",
+        "What are your career goals?",
+        "How do you handle criticism?",
+        "What do you know about our company?",
+        "Why did you choose this field?",
+        "How do you manage time?",
+        "What is your biggest achievement?",
+        "Describe teamwork experience",
+        "How do you solve problems?",
+        "Are you a leader or follower?",
+        "How do you handle conflicts?",
+        "What makes you unique?",
+        "What are your hobbies?",
+        "How do you learn new skills?",
+        "What are your short-term goals?",
+        "What are your long-term goals?",
+        "How do you stay motivated?",
+        "Describe your work ethic",
+        "How do you adapt to change?",
+        "What inspires you?",
+        "How do you handle deadlines?",
+        "How do you handle stress?",
+        "What do you expect from this role?",
+        "What kind of work environment do you prefer?",
+        "How do you prioritize tasks?",
+        "Describe your communication skills",
+        "How do you deal with failure?",
+        "What is your ideal job?",
+        "What do you do under pressure?",
+        "How do you define success?",
+        "Why should we trust you?",
+        "How do you improve yourself?",
+        "What are your technical skills?",
+        "How do you stay organized?",
+        "Describe a difficult decision",
+        "How do you handle mistakes?",
+        "What are your values?",
+        "What does teamwork mean to you?",
+        "How do you manage expectations?",
+        "What are you passionate about?",
+        "Why do you want this job?",
+      ];
+
+      function getRandomQuestions() {
+        return [...QUESTIONS].sort(() => Math.random() - 0.5).slice(0, 5);
+      }
+
+      let questions = [];
+      let qIndex = 0;
+      let recognition;
+      let finalTranscript = "";
+      let results = [];
+      let stream = null;
+
+      const userAnswerEl = document.getElementById("userAnswer");
+      const aiQuestionEl = document.getElementById("aiQuestion");
+      const aiImage = document.getElementById("aiImage");
+      const recordBtn = document.getElementById("recordBtn");
+      const stopBtn = document.getElementById("stopBtn");
+      const startBtn = document.getElementById("startBtn");
+      const indicator = document.getElementById("recordingIndicator");
+
+      async function startCamera() {
+        stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        document.getElementById("userVideo").srcObject = stream;
+      }
+
+      /* 🎤 SPEAK + GLOW CONTROL */
+      function speak(text, cb) {
+        const msg = new SpeechSynthesisUtterance(text);
+
+        aiImage.classList.add("ai-speaking");
+
+        msg.onend = () => {
+          aiImage.classList.remove("ai-speaking");
+          if (cb) cb();
+        };
+
+        speechSynthesis.speak(msg);
+      }
+
+      function askQuestion() {
+        if (qIndex >= questions.length) {
+          localStorage.setItem("interviewResults", JSON.stringify(results));
+          window.location.href = "/result";
+          return;
+        }
+
+        userAnswerEl.innerHTML = "<strong>Your Answer:</strong>";
+        aiQuestionEl.innerText = questions[qIndex];
+
+        speak(questions[qIndex], () => {
+          recordBtn.disabled = false;
+        });
+
+        qIndex++;
+      }
+
+      async function startRecording() {
+        const SpeechRecognition =
+          window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (!SpeechRecognition) {
+          alert("Speech Recognition works only in Google Chrome");
+          return;
+        }
+
+        await navigator.mediaDevices.getUserMedia({ audio: true });
+
+        finalTranscript = "";
+        indicator.style.display = "block";
+
+        recognition = new SpeechRecognition();
+        recognition.lang = "en-US";
+        recognition.continuous = true;
+        recognition.interimResults = true;
+
+        recognition.onresult = (e) => {
+          let interim = "";
+          for (let i = e.resultIndex; i < e.results.length; i++) {
+            const txt = e.results[i][0].transcript;
+            if (e.results[i].isFinal) finalTranscript += txt + " ";
+            else interim += txt;
+          }
+
+          userAnswerEl.innerHTML =
+            "<strong>Your Answer:</strong> " +
+            finalTranscript +
+            "<i style='opacity:0.6'>" +
+            interim +
+            "</i>";
+        };
+
+        recognition.start();
+        recordBtn.disabled = true;
+        stopBtn.disabled = false;
+      }
+
+      function stopRecording() {
+        recognition.stop();
+        indicator.style.display = "none";
+
+        const wc = finalTranscript.trim().split(/\s+/).length;
+        const score = Math.min(Math.floor(wc / 10) * 2, 20);
+
+        results.push({
+          question: questions[qIndex - 1],
+          answer: finalTranscript || "No answer",
+          score,
+        });
+
+        stopBtn.disabled = true;
+        askQuestion();
+      }
+
+      startBtn.onclick = async () => {
+        questions = getRandomQuestions();
+        qIndex = 0;
+        results = [];
+        await startCamera();
+        startBtn.disabled = true;
+        askQuestion();
+      };
+
+      recordBtn.onclick = startRecording;
+      stopBtn.onclick = stopRecording;
+    </script>
+  </body>
+</html>

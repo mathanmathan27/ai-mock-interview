@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Interview Result</title>
+
+    <style>
+      :root {
+        --bg-dark: #020617;
+        --bg-light: #f4f6f8;
+        --card-dark: #0f172a;
+        --card-light: #ffffff;
+        --text-dark: #e5e7eb;
+        --text-light: #020617;
+        --accent: #38bdf8;
+      }
+
+      body {
+        margin: 0;
+        padding: 40px;
+        font-family: Arial, sans-serif;
+        background: var(--bg-dark);
+        color: var(--text-dark);
+        transition: 0.4s;
+      }
+
+      body.light {
+        background: var(--bg-light);
+        color: var(--text-light);
+      }
+
+      .container {
+        max-width: 900px;
+        margin: auto;
+      }
+
+      .card {
+        background: var(--card-dark);
+        padding: 30px;
+        border-radius: 14px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      }
+
+      body.light .card {
+        background: var(--card-light);
+      }
+
+      h1 {
+        text-align: center;
+        color: var(--accent);
+      }
+
+      .subtitle {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #94a3b8;
+      }
+
+      .score-box {
+        text-align: center;
+        font-size: 26px;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+
+      .feedback {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .result-item {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 12px;
+      }
+
+      body.light .result-item {
+        background: #f1f5f9;
+      }
+
+      .btn-box {
+        text-align: center;
+        margin-top: 25px;
+      }
+
+      button {
+        padding: 12px 26px;
+        font-size: 15px;
+        border: none;
+        border-radius: 8px;
+        background: var(--accent);
+        cursor: pointer;
+        font-weight: bold;
+        margin: 6px;
+      }
+
+      .theme-toggle {
+        position: fixed;
+        top: 15px;
+        right: 20px;
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        color: inherit;
+      }
+    </style>
+  </head>
+
+  <body>
+    <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀</button>
+
+    <div class="container">
+      <div class="card">
+        <h1>Interview Completed 🎉</h1>
+        <p class="subtitle">Here is your AI Mock HR Interview performance</p>
+
+        <div class="score-box" id="scoreBox"></div>
+        <div class="feedback" id="feedback"></div>
+
+        <div id="resultList"></div>
+
+        <div class="btn-box">
+          <button onclick="viewReport()">View Performance Report</button>
+          <button onclick="goHome()">Back to Home</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function toggleTheme() {
+        document.body.classList.toggle("light");
+        localStorage.setItem(
+          "theme",
+          document.body.classList.contains("light") ? "light" : "dark"
+        );
+      }
+
+      if (localStorage.getItem("theme") === "light") {
+        document.body.classList.add("light");
+      }
+
+      const results =
+        JSON.parse(localStorage.getItem("interviewResults")) || [];
+
+      const list = document.getElementById("resultList");
+      const scoreBox = document.getElementById("scoreBox");
+      const feedbackEl = document.getElementById("feedback");
+
+      if (results.length === 0) {
+        scoreBox.innerHTML = "Score: 0%";
+        feedbackEl.innerHTML = "No interview data found.";
+      } else {
+        let totalScore = 0;
+
+        results.forEach((r) => {
+          totalScore += r.score || 0;
+        });
+
+        let finalScore = Math.round((totalScore / (results.length * 20)) * 100);
+
+        scoreBox.innerHTML = `Score: ${finalScore}%`;
+
+        feedbackEl.innerHTML =
+          finalScore >= 80
+            ? "Excellent performance."
+            : finalScore >= 50
+            ? "Good attempt. Improve clarity."
+            : "Needs improvement.";
+
+        results.forEach((item, index) => {
+          list.innerHTML += `
+          <div class="result-item">
+            <b>Q${index + 1}. ${item.question}</b><br/>
+            <b>Your Answer:</b> ${item.answer}<br/>
+            <b>Score:</b> ${item.score}/20
+          </div>`;
+        });
+      }
+
+      function viewReport() {
+        window.location.href = "/performance";
+      }
+
+      function goHome() {
+        window.location.href = "/";
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AI Mock Interview</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <nav>
+      <strong>AI Mock Interview</strong>
+      <div>
+        <a href="/">Home</a>
+        <a href="/contact">Contact</a>
+        <a href="/report">Report</a>
+        <a href="/login" id="loginLink">Login</a>
+      </div>
+    </nav>
+    <script src="{{ url_for('static', filename='effects.js') }}"></script>
+
+    <div class="container">
+      <h1>AI Powered HR Interview System</h1>
+      <p>
+        Practice real HR interviews using speech recognition and AI evaluation.
+      </p>
+
+      <ul>
+        <li>🎤 Speech to Text</li>
+        <li>🤖 AI Interviewer</li>
+        <li>📊 Performance Reports</li>
+        <li>🛡 Anti-AI Answer Detection</li>
+      </ul>
+
+      <button onclick="startInterview()">Start Interview</button>
+    </div>
+
+    <script>
+      function startInterview() {
+        window.location.href = "/interview";
+      }
+
+      if (localStorage.getItem("loggedIn")) {
+        document.getElementById("loginLink").style.display = "none";
+      }
+    </script>
+  </body>
+</html>

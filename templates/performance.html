@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Interview Performance Report</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+      body {
+        margin: 0;
+        padding: 40px;
+        font-family: Arial, sans-serif;
+        background: #020617;
+        color: #e5e7eb;
+      }
+
+      .card {
+        max-width: 900px;
+        margin: auto;
+        background: #0f172a;
+        padding: 30px;
+        border-radius: 14px;
+        position: relative;
+      }
+
+      h1 {
+        text-align: center;
+        color: #38bdf8;
+      }
+
+      canvas {
+        margin-top: 30px;
+      }
+
+      button {
+        margin-top: 30px;
+        padding: 12px 24px;
+        background: #38bdf8;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      /* CLOSE BUTTON */
+      .close-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: #38bdf8;
+        color: #020617;
+        font-size: 20px;
+        border: none;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="card">
+      <button class="close-btn" onclick="goHome()">×</button>
+
+      <h1>Interview Performance Report</h1>
+      <canvas id="scoreChart"></canvas>
+
+      <button onclick="goHome()">Back to Home</button>
+    </div>
+
+    <script>
+      const results =
+        JSON.parse(localStorage.getItem("interviewResults")) || [];
+
+      if (results.length > 0) {
+        new Chart(document.getElementById("scoreChart"), {
+          type: "bar",
+          data: {
+            labels: results.map((_, i) => "Q" + (i + 1)),
+            datasets: [
+              {
+                label: "Score (out of 20)",
+                data: results.map((r) => r.score || 0),
+                backgroundColor: "#38bdf8",
+              },
+            ],
+          },
+          options: {
+            scales: { y: { beginAtZero: true, max: 20 } },
+          },
+        });
+      }
+
+      function goHome() {
+        window.location.href = "/";
+      }
+    </script>
+  </body>
+</html>

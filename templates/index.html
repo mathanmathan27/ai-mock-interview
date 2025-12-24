@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI Mock HR Interview</title>
+
+  <!-- Chart.js (used later in performance page, safe here) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #020617;
+      --bg-light: #f8fafc;
+      --card-dark: #020617cc;
+      --card-light: #ffffff;
+      --text-dark: #e5e7eb;
+      --text-light: #020617;
+      --accent: #38bdf8;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-dark);
+      transition: 0.4s;
+      overflow-x: hidden;
+    }
+
+    /* ===== PARTICLES (DARK ONLY) ===== */
+    #particlesCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+    }
+
+    body.light #particlesCanvas {
+      display: none;
+    }
+
+    /* ===== NAVBAR ===== */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 40px;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(10px);
+    }
+
+    body.light nav {
+      background: rgba(255, 255, 255, 0.75);
+    }
+
+    nav a, nav button {
+      margin-left: 18px;
+      background: none;
+      border: none;
+      color: inherit;
+      font-size: 15px;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    nav strong {
+      font-size: 18px;
+      color: var(--accent);
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      max-width: 1100px;
+      margin: 80px auto;
+      padding: 0 40px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .hero h1 {
+      font-size: 44px;
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      color: #94a3b8;
+      font-size: 17px;
+      margin-bottom: 24px;
+    }
+
+    body.light .hero p {
+      color: #475569;
+    }
+
+    .hero img {
+      width: 100%;
+      border-radius: 18px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+    }
+
+    /* ===== BUTTON ===== */
+    .primary {
+      padding: 14px 36px;
+      background: var(--accent);
+      color: #020617;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* ===== FEATURES ===== */
+    .features {
+      max-width: 1100px;
+      margin: 60px auto;
+      padding: 0 40px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--card-dark);
+      padding: 26px;
+      border-radius: 16px;
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+    }
+
+    .card img {
+      width: 56px;
+      margin-bottom: 12px;
+    }
+
+    body.light .card {
+      background: var(--card-light);
+    }
+
+    /* ===== LIGHT MODE ===== */
+    body.light {
+      background: var(--bg-light);
+      color: var(--text-light);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- PARTICLES -->
+<canvas id="particlesCanvas"></canvas>
+
+<!-- NAVBAR -->
+<nav>
+  <strong>AI Mock Interview</strong>
+
+  <div>
+    {% if session.get("user") %}
+      <a href="{{ url_for('performance') }}">Report</a>
+      <a href="{{ url_for('contact') }}">Contact</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+    {% else %}
+      <a href="{{ url_for('login') }}">Login</a>
+      <a href="{{ url_for('register') }}">Register</a>
+      <a href="{{ url_for('contact') }}">Contact</a>
+    {% endif %}
+    <button onclick="toggleTheme()">🌙 / ☀</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <h1>AI Powered HR Interview</h1>
+    <p>
+      Practice real HR interviews using speech recognition,
+      AI evaluation, and honest performance tracking.
+    </p>
+
+    <!-- ✅ WORKING BUTTON -->
+    <button
+      class="primary"
+      onclick="window.location.href='{{ url_for('interview') }}'">
+      Start Interview
+    </button>
+  </div>
+
+  <img
+    src="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=900&q=80"
+    alt="AI Interview"
+  />
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="card">
+    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png">
+    <h3>AI Interviewer</h3>
+    <p>Realistic HR questions with voice interaction.</p>
+  </div>
+
+  <div class="card">
+    <img src="https://cdn-icons-png.flaticon.com/512/2920/2920244.png">
+    <h3>Speech to Text</h3>
+    <p>Your spoken answers are captured instantly.</p>
+  </div>
+
+  <div class="card">
+    <img src="https://cdn-icons-png.flaticon.com/512/942/942748.png">
+    <h3>Interview Results</h3>
+    <p>Review all answers after completion.</p>
+  </div>
+
+  <div class="card">
+    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828640.png">
+    <h3>Honest Practice</h3>
+    <p>AI-generated answers are restricted.</p>
+  </div>
+
+  <div class="card">
+    <img src="https://cdn-icons-png.flaticon.com/512/3281/3281289.png">
+    <h3>Performance Tracking</h3>
+    <p>Analyze communication and confidence.</p>
+  </div>
+
+  <div class="card">
+    <img src="https://cdn-icons-png.flaticon.com/512/1995/1995574.png">
+    <h3>Student Friendly</h3>
+    <p>Designed for interview preparation.</p>
+  </div>
+</section>
+
+<!-- JS -->
+<script>
+  /* THEME TOGGLE */
+  function toggleTheme() {
+    document.body.classList.toggle("light");
+  }
+
+  /* PARTICLES (DARK MODE ONLY) */
+  const canvas = document.getElementById("particlesCanvas");
+  const ctx = canvas.getContext("2d");
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.onresize = resize;
+
+  const dots = Array.from({ length: 80 }, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    vx: (Math.random() - 0.5) * 0.4,
+    vy: (Math.random() - 0.5) * 0.4
+  }));
+
+  function animate() {
+    if (document.body.classList.contains("light")) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      requestAnimationFrame(animate);
+      return;
+    }
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    dots.forEach(d => {
+      d.x += d.vx;
+      d.y += d.vy;
+      if (d.x < 0 || d.x > canvas.width) d.vx *= -1;
+      if (d.y < 0 || d.y > canvas.height) d.vy *= -1;
+
+      ctx.fillStyle = "#38bdf8";
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, 2, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>
+
+</body>
+</html>
