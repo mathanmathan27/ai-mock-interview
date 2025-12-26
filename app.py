@@ -85,18 +85,16 @@ def interview():
     return render_template("interview.html")
 
 # -------------------------------
-# RESULT  ✅ (THIS WAS MISSING)
+# RESULT
 # -------------------------------
 @app.route("/result")
 def result():
-    # Results are stored in localStorage (frontend)
-    # This page just renders the result UI
     if "user" not in session:
         return redirect(url_for("login"))
     return render_template("result.html")
 
 # -------------------------------
-# CONTACT (EMAIL)
+# CONTACT
 # -------------------------------
 @app.route("/contact_us", methods=["GET", "POST"])
 def contact():
@@ -114,20 +112,14 @@ def contact():
             with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
                 smtp.login("yourgmail@gmail.com", "YOUR_APP_PASSWORD")
                 smtp.send_message(msg)
-            return render_template(
-                "contact_us.html",
-                success="Message sent successfully"
-            )
+            return render_template("contact_us.html", success="Message sent successfully")
         except Exception as e:
-            return render_template(
-                "contact_us.html",
-                error=str(e)
-            )
+            return render_template("contact_us.html", error=str(e))
 
     return render_template("contact_us.html")
 
 # -------------------------------
-# PERFORMANCE / REPORT
+# PERFORMANCE
 # -------------------------------
 @app.route("/performance")
 def performance():
@@ -136,7 +128,8 @@ def performance():
     return render_template("performance.html")
 
 # -------------------------------
-# RUN APP
+# RUN APP (RENDER SAFE)
 # -------------------------------
 if __name__ == "__main__":
-    app.run(debug=True, use_reloader=False)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=False)
