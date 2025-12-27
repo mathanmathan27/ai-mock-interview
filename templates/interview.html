@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <title>AI Mock HR Interview</title>
-
     <style>
       :root {
         --bg-dark: #020617;
@@ -13,7 +12,6 @@
         --text-dark: #e5e7eb;
         --text-light: #020617;
       }
-
       body {
         font-family: Arial, sans-serif;
         background: var(--bg-dark);
@@ -21,24 +19,20 @@
         padding: 20px;
         transition: 0.4s;
       }
-
       body.light {
         background: var(--bg-light);
         color: var(--text-light);
       }
-
       h1 {
         text-align: center;
         margin-bottom: 25px;
       }
-
       .container {
         display: flex;
         gap: 30px;
         justify-content: center;
         flex-wrap: wrap;
       }
-
       .card {
         background: var(--card-dark);
         width: 420px;
@@ -47,11 +41,9 @@
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
         text-align: center;
       }
-
       body.light .card {
         background: var(--card-light);
       }
-
       video,
       img {
         width: 100%;
@@ -59,12 +51,10 @@
         border-radius: 10px;
         object-fit: cover;
       }
-
       .ai-speaking {
         box-shadow: 0 0 25px #00c6ff, 0 0 50px #00c6ff;
         animation: pulseGlow 1.2s infinite alternate;
       }
-
       @keyframes pulseGlow {
         from {
           box-shadow: 0 0 15px #00c6ff;
@@ -73,26 +63,22 @@
           box-shadow: 0 0 45px #00c6ff;
         }
       }
-
       #aiQuestion {
         font-size: 18px;
         font-weight: bold;
         min-height: 50px;
         margin-top: 15px;
       }
-
       #userAnswer {
         font-size: 16px;
         min-height: 60px;
         margin-top: 10px;
         text-align: left;
       }
-
       .center {
         text-align: center;
         margin-top: 30px;
       }
-
       button {
         padding: 12px 24px;
         font-size: 16px;
@@ -101,33 +87,27 @@
         cursor: pointer;
         margin: 8px;
       }
-
       #startBtn {
         background: #6c757d;
         color: white;
       }
-
       #recordBtn {
         background: #007bff;
         color: white;
       }
-
       #stopBtn {
         background: #28a745;
         color: white;
       }
-
       button:disabled {
         background: #aaa;
         cursor: not-allowed;
       }
-
       #recordingIndicator {
         color: red;
         font-weight: bold;
         display: none;
       }
-
       .theme-toggle {
         position: fixed;
         top: 15px;
@@ -138,7 +118,6 @@
         cursor: pointer;
         color: inherit;
       }
-
       .close-btn {
         position: fixed;
         top: 15px;
@@ -152,13 +131,10 @@
       }
     </style>
   </head>
-
   <body>
     <button class="close-btn" onclick="closeInterview()">✖ Close</button>
     <button class="theme-toggle" onclick="toggleTheme()">🌙 / ☀</button>
-
     <h1>AI Mock HR Interview</h1>
-
     <div class="container">
       <div class="card">
         <h2>You</h2>
@@ -166,7 +142,6 @@
         <p id="userAnswer"><strong>Your Answer:</strong></p>
         <p id="recordingIndicator">Recording...</p>
       </div>
-
       <div class="card">
         <h2>AI Interviewer</h2>
         <img
@@ -176,25 +151,20 @@
         <p id="aiQuestion">Click Start Interview</p>
       </div>
     </div>
-
     <div class="center">
       <button id="startBtn">Start Interview</button>
       <button id="recordBtn" disabled>Record</button>
       <button id="stopBtn" disabled>Stop</button>
     </div>
-
     <script>
       function toggleTheme() {
         document.body.classList.toggle("light");
       }
-
       function closeInterview() {
         if (stream) stream.getTracks().forEach((t) => t.stop());
         window.history.back();
       }
-
-      /* ===== 50 QUESTIONS ===== */
-      const QUESTIONS = [
+      /* ===== 50 QUESTIONS ===== */ const QUESTIONS = [
         "Tell me about yourself",
         "What are your strengths?",
         "What are your weaknesses?",
@@ -245,18 +215,145 @@
         "What are you passionate about?",
         "Why do you want this job?",
       ];
+      const MODEL_ANSWERS = {
+        "Tell me about yourself":
+          "My name is ____. I am from ____. I recently completed my studies and I am eager to start my career. I am a quick learner and motivated person.",
+
+        "What are your strengths?":
+          "My strengths are communication skills, adaptability, and willingness to learn.",
+
+        "What are your weaknesses?":
+          "I sometimes overthink, but I am learning to manage my time and stay focused.",
+
+        "Why should we hire you?":
+          "I am hardworking, dedicated, and ready to contribute positively to the organization.",
+
+        "Where do you see yourself in five years?":
+          "I see myself growing professionally, gaining experience, and taking more responsibility.",
+
+        "Describe a challenge you faced":
+          "I faced challenges in managing deadlines, which taught me time management.",
+
+        "How do you handle pressure?":
+          "I stay calm, analyze the situation, and focus on solutions.",
+
+        "What motivates you?":
+          "Learning new things and achieving goals motivates me.",
+
+        "Tell me about a failure":
+          "I once failed to meet expectations, but I learned from it and improved.",
+
+        "What are your career goals?":
+          "My goal is to grow professionally and develop strong skills.",
+
+        "How do you handle criticism?":
+          "I take criticism positively and use it to improve.",
+
+        "What do you know about our company?":
+          "Your company values innovation, quality, and growth.",
+
+        "Why did you choose this field?":
+          "I enjoy problem-solving and continuous learning.",
+
+        "How do you manage time?": "I prioritize tasks and follow a schedule.",
+
+        "What is your biggest achievement?":
+          "Completing my academic projects successfully.",
+
+        "Describe teamwork experience":
+          "I have worked in teams where collaboration was important.",
+
+        "How do you solve problems?":
+          "I analyze the issue and apply logical solutions.",
+
+        "Are you a leader or follower?":
+          "I can be both depending on the situation.",
+
+        "How do you handle conflicts?":
+          "I listen patiently and communicate clearly.",
+
+        "What makes you unique?": "My positive attitude and learning mindset.",
+
+        "What are your hobbies?":
+          "Learning new skills, reading, and listening to music.",
+
+        "How do you learn new skills?":
+          "Through practice and online resources.",
+
+        "What are your short-term goals?": "To gain practical experience.",
+
+        "What are your long-term goals?": "To become an expert in my field.",
+
+        "How do you stay motivated?": "By setting goals and tracking progress.",
+
+        "Describe your work ethic": "I am disciplined and responsible.",
+
+        "How do you adapt to change?": "I stay flexible and open-minded.",
+
+        "What inspires you?": "Successful people and innovation.",
+
+        "How do you handle deadlines?":
+          "By planning and completing tasks on time.",
+
+        "How do you handle stress?": "By staying organized and calm.",
+
+        "What do you expect from this role?":
+          "Learning opportunities and growth.",
+
+        "What kind of work environment do you prefer?":
+          "A positive and collaborative environment.",
+
+        "How do you prioritize tasks?": "Based on importance and deadlines.",
+
+        "Describe your communication skills":
+          "I communicate clearly and listen actively.",
+
+        "How do you deal with failure?": "I learn from mistakes and improve.",
+
+        "What is your ideal job?": "A role that allows learning and growth.",
+
+        "What do you do under pressure?": "I focus on solutions.",
+
+        "How do you define success?":
+          "Achieving goals and continuous improvement.",
+
+        "Why should we trust you?": "I am honest and responsible.",
+
+        "How do you improve yourself?":
+          "By learning new skills and self-reflection.",
+
+        "What are your technical skills?":
+          "Basic programming, problem-solving, and tools knowledge.",
+
+        "How do you stay organized?": "Using task lists and planning.",
+
+        "Describe a difficult decision":
+          "Choosing priorities during deadlines.",
+
+        "How do you handle mistakes?":
+          "I accept responsibility and correct them.",
+
+        "What are your values?": "Honesty, respect, and dedication.",
+
+        "What does teamwork mean to you?":
+          "Working together to achieve common goals.",
+
+        "How do you manage expectations?": "By communicating clearly.",
+
+        "What are you passionate about?": "Learning and personal growth.",
+
+        "Why do you want this job?": "To grow professionally and contribute.",
+      };
 
       function getRandomQuestions() {
         return [...QUESTIONS].sort(() => Math.random() - 0.5).slice(0, 5);
       }
-
       let questions = [];
       let qIndex = 0;
       let recognition;
       let finalTranscript = "";
       let results = [];
       let stream = null;
-
       const userAnswerEl = document.getElementById("userAnswer");
       const aiQuestionEl = document.getElementById("aiQuestion");
       const aiImage = document.getElementById("aiImage");
@@ -264,9 +361,7 @@
       const stopBtn = document.getElementById("stopBtn");
       const startBtn = document.getElementById("startBtn");
       const indicator = document.getElementById("recordingIndicator");
-
-      /* ✅ CAMERA FIX */
-      async function startCamera() {
+      /* ✅ CAMERA FIX */ async function startCamera() {
         try {
           const video = document.getElementById("userVideo");
           stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -277,7 +372,6 @@
           console.error(err);
         }
       }
-
       function speak(text, cb) {
         const msg = new SpeechSynthesisUtterance(text);
         aiImage.classList.add("ai-speaking");
@@ -287,43 +381,33 @@
         };
         speechSynthesis.speak(msg);
       }
-
       function askQuestion() {
         if (qIndex >= questions.length) {
           localStorage.setItem("interviewResults", JSON.stringify(results));
           window.location.href = "/result";
           return;
         }
-
         userAnswerEl.innerHTML = "<strong>Your Answer:</strong>";
         aiQuestionEl.innerText = questions[qIndex];
-
         speak(questions[qIndex], () => {
           recordBtn.disabled = false;
         });
-
         qIndex++;
       }
-
       async function startRecording() {
         const SpeechRecognition =
           window.SpeechRecognition || window.webkitSpeechRecognition;
-
         if (!SpeechRecognition) {
           alert("Speech Recognition works only in Google Chrome");
           return;
         }
-
         await navigator.mediaDevices.getUserMedia({ audio: true });
-
         finalTranscript = "";
         indicator.style.display = "block";
-
         recognition = new SpeechRecognition();
         recognition.lang = "en-US";
         recognition.continuous = true;
         recognition.interimResults = true;
-
         recognition.onresult = (e) => {
           let interim = "";
           for (let i = e.resultIndex; i < e.results.length; i++) {
@@ -331,7 +415,6 @@
             if (e.results[i].isFinal) finalTranscript += txt + " ";
             else interim += txt;
           }
-
           userAnswerEl.innerHTML =
             "<strong>Your Answer:</strong> " +
             finalTranscript +
@@ -339,29 +422,23 @@
             interim +
             "</i>";
         };
-
         recognition.start();
         recordBtn.disabled = true;
         stopBtn.disabled = false;
       }
-
       function stopRecording() {
         recognition.stop();
         indicator.style.display = "none";
-
         const wc = finalTranscript.trim().split(/\s+/).length;
         const score = Math.min(Math.floor(wc / 10) * 2, 20);
-
         results.push({
           question: questions[qIndex - 1],
           answer: finalTranscript || "No answer",
           score,
         });
-
         stopBtn.disabled = true;
         askQuestion();
       }
-
       startBtn.onclick = async () => {
         questions = getRandomQuestions();
         qIndex = 0;
@@ -370,7 +447,6 @@
         startBtn.disabled = true;
         askQuestion();
       };
-
       recordBtn.onclick = startRecording;
       stopBtn.onclick = stopRecording;
     </script>

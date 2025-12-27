@@ -68,7 +68,6 @@
         margin-bottom: 20px;
       }
 
-      /* NEW SCORE BOX */
       .soft-scores {
         background: rgba(255, 255, 255, 0.06);
         padding: 15px;
@@ -79,11 +78,6 @@
 
       body.light .soft-scores {
         background: #e5e7eb;
-      }
-
-      .soft-scores div {
-        margin: 6px 0;
-        font-weight: bold;
       }
 
       .result-item {
@@ -97,20 +91,24 @@
         background: #f1f5f9;
       }
 
-      .btn-box {
-        text-align: center;
-        margin-top: 25px;
+      .model-answer {
+        display: none;
+        margin-top: 8px;
+        padding: 10px;
+        background: rgba(56, 189, 248, 0.15);
+        border-radius: 6px;
+        font-size: 14px;
       }
 
       button {
-        padding: 12px 26px;
-        font-size: 15px;
+        padding: 10px 20px;
+        font-size: 14px;
         border: none;
         border-radius: 8px;
         background: var(--accent);
         cursor: pointer;
         font-weight: bold;
-        margin: 6px;
+        margin-top: 8px;
       }
 
       .theme-toggle {
@@ -137,12 +135,11 @@
         <div class="score-box" id="scoreBox"></div>
         <div class="feedback" id="feedback"></div>
 
-        <!-- NEW SCORES -->
         <div class="soft-scores" id="softScores"></div>
 
         <div id="resultList"></div>
 
-        <div class="btn-box">
+        <div style="text-align: center; margin-top: 25px">
           <button onclick="viewReport()">View Performance Report</button>
           <button onclick="goHome()">Back to Home</button>
         </div>
@@ -152,15 +149,71 @@
     <script>
       function toggleTheme() {
         document.body.classList.toggle("light");
-        localStorage.setItem(
-          "theme",
-          document.body.classList.contains("light") ? "light" : "dark"
-        );
       }
 
-      if (localStorage.getItem("theme") === "light") {
-        document.body.classList.add("light");
-      }
+      const MODEL_ANSWERS = {
+        "Tell me about yourself":
+          "My name is ____. I am from ____. I recently completed my studies and I am eager to start my career.",
+        "What are your strengths?":
+          "My strengths include communication skills, adaptability, and willingness to learn.",
+        "What are your weaknesses?":
+          "I sometimes overthink, but I am improving my time management skills.",
+        "Why should we hire you?":
+          "I am hardworking, motivated, and eager to contribute.",
+        "Where do you see yourself in five years?":
+          "I see myself growing professionally and taking more responsibility.",
+        "Describe a challenge you faced":
+          "Managing deadlines taught me better planning.",
+        "How do you handle pressure?": "I stay calm and focus on solutions.",
+        "What motivates you?": "Learning new skills and achieving goals.",
+        "Tell me about a failure": "I learned valuable lessons from failure.",
+        "What are your career goals?":
+          "To grow and become skilled in my field.",
+        "How do you handle criticism?": "I take it positively and improve.",
+        "What do you know about our company?":
+          "Your company values innovation and quality.",
+        "Why did you choose this field?":
+          "I enjoy problem-solving and learning.",
+        "How do you manage time?": "By prioritizing tasks.",
+        "What is your biggest achievement?": "Completing my academic projects.",
+        "Describe teamwork experience":
+          "I collaborated effectively with team members.",
+        "How do you solve problems?":
+          "By analyzing and finding logical solutions.",
+        "Are you a leader or follower?": "I can adapt to both roles.",
+        "How do you handle conflicts?": "Through calm communication.",
+        "What makes you unique?": "My positive attitude.",
+        "What are your hobbies?": "Learning, reading, and music.",
+        "How do you learn new skills?": "Practice and online resources.",
+        "What are your short-term goals?": "Gain practical experience.",
+        "What are your long-term goals?": "Become an expert.",
+        "How do you stay motivated?": "Setting goals.",
+        "Describe your work ethic": "Disciplined and responsible.",
+        "How do you adapt to change?": "By staying flexible.",
+        "What inspires you?": "Success stories.",
+        "How do you handle deadlines?": "Planning ahead.",
+        "How do you handle stress?": "Staying organized.",
+        "What do you expect from this role?": "Growth and learning.",
+        "What kind of work environment do you prefer?":
+          "Collaborative environment.",
+        "How do you prioritize tasks?": "Based on importance.",
+        "Describe your communication skills": "Clear and effective.",
+        "How do you deal with failure?": "Learn and improve.",
+        "What is your ideal job?": "A role with growth.",
+        "What do you do under pressure?": "Focus on solutions.",
+        "How do you define success?": "Achieving goals.",
+        "Why should we trust you?": "I am honest.",
+        "How do you improve yourself?": "Continuous learning.",
+        "What are your technical skills?": "Programming basics.",
+        "How do you stay organized?": "Task lists.",
+        "Describe a difficult decision": "Managing priorities.",
+        "How do you handle mistakes?": "Correct and learn.",
+        "What are your values?": "Honesty and respect.",
+        "What does teamwork mean to you?": "Working together.",
+        "How do you manage expectations?": "Clear communication.",
+        "What are you passionate about?": "Learning.",
+        "Why do you want this job?": "Professional growth.",
+      };
 
       const results =
         JSON.parse(localStorage.getItem("interviewResults")) || [];
@@ -184,37 +237,28 @@
 
         let finalScore = Math.round((totalScore / (results.length * 20)) * 100);
 
-        // AI-style soft skill evaluation
-        let eyeContact = Math.min(10, Math.round(finalScore / 10));
-        let bodyLanguage = Math.min(
-          10,
-          Math.round(totalWords / (results.length * 12))
-        );
-        let vocabulary = Math.min(10, Math.round(finalScore / 12));
-
         scoreBox.innerHTML = `Score: ${finalScore}%`;
 
-        feedbackEl.innerHTML =
-          finalScore >= 80
-            ? "Excellent performance."
-            : finalScore >= 50
-            ? "Good attempt. Improve clarity."
-            : "Needs improvement.";
-
-        softScoresEl.innerHTML = `
-          👀 Eye Contact: ${eyeContact}/10 <br/>
-          🧍 Body Language: ${bodyLanguage}/10 <br/>
-          📚 Vocabulary: ${vocabulary}/10
-        `;
-
         results.forEach((item, index) => {
+          const modelAnswer =
+            MODEL_ANSWERS[item.question] || "No model answer.";
+
           list.innerHTML += `
           <div class="result-item">
             <b>Q${index + 1}. ${item.question}</b><br/>
             <b>Your Answer:</b> ${item.answer}<br/>
-            <b>Score:</b> ${item.score}/20
+            <b>Score:</b> ${item.score}/20<br/>
+            <button onclick="toggleAnswer(${index})">Show Answer</button>
+            <div class="model-answer" id="answer-${index}">
+              <b>Model Answer:</b> ${modelAnswer}
+            </div>
           </div>`;
         });
+      }
+
+      function toggleAnswer(i) {
+        const el = document.getElementById("answer-" + i);
+        el.style.display = el.style.display === "none" ? "block" : "none";
       }
 
       function viewReport() {
