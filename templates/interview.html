@@ -60,7 +60,6 @@
         object-fit: cover;
       }
 
-      /* 🔥 AI GLOW EFFECT */
       .ai-speaking {
         box-shadow: 0 0 25px #00c6ff, 0 0 50px #00c6ff;
         animation: pulseGlow 1.2s infinite alternate;
@@ -266,22 +265,26 @@
       const startBtn = document.getElementById("startBtn");
       const indicator = document.getElementById("recordingIndicator");
 
+      /* ✅ CAMERA FIX */
       async function startCamera() {
-        stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        document.getElementById("userVideo").srcObject = stream;
+        try {
+          const video = document.getElementById("userVideo");
+          stream = await navigator.mediaDevices.getUserMedia({ video: true });
+          video.srcObject = stream;
+          await video.play();
+        } catch (err) {
+          alert("Camera permission denied or camera not available");
+          console.error(err);
+        }
       }
 
-      /* 🎤 SPEAK + GLOW CONTROL */
       function speak(text, cb) {
         const msg = new SpeechSynthesisUtterance(text);
-
         aiImage.classList.add("ai-speaking");
-
         msg.onend = () => {
           aiImage.classList.remove("ai-speaking");
           if (cb) cb();
         };
-
         speechSynthesis.speak(msg);
       }
 

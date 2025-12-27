@@ -65,7 +65,25 @@
 
       .feedback {
         text-align: center;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
+      }
+
+      /* NEW SCORE BOX */
+      .soft-scores {
+        background: rgba(255, 255, 255, 0.06);
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+        text-align: center;
+      }
+
+      body.light .soft-scores {
+        background: #e5e7eb;
+      }
+
+      .soft-scores div {
+        margin: 6px 0;
+        font-weight: bold;
       }
 
       .result-item {
@@ -119,6 +137,9 @@
         <div class="score-box" id="scoreBox"></div>
         <div class="feedback" id="feedback"></div>
 
+        <!-- NEW SCORES -->
+        <div class="soft-scores" id="softScores"></div>
+
         <div id="resultList"></div>
 
         <div class="btn-box">
@@ -147,18 +168,29 @@
       const list = document.getElementById("resultList");
       const scoreBox = document.getElementById("scoreBox");
       const feedbackEl = document.getElementById("feedback");
+      const softScoresEl = document.getElementById("softScores");
 
       if (results.length === 0) {
         scoreBox.innerHTML = "Score: 0%";
         feedbackEl.innerHTML = "No interview data found.";
       } else {
         let totalScore = 0;
+        let totalWords = 0;
 
         results.forEach((r) => {
           totalScore += r.score || 0;
+          if (r.answer) totalWords += r.answer.split(" ").length;
         });
 
         let finalScore = Math.round((totalScore / (results.length * 20)) * 100);
+
+        // AI-style soft skill evaluation
+        let eyeContact = Math.min(10, Math.round(finalScore / 10));
+        let bodyLanguage = Math.min(
+          10,
+          Math.round(totalWords / (results.length * 12))
+        );
+        let vocabulary = Math.min(10, Math.round(finalScore / 12));
 
         scoreBox.innerHTML = `Score: ${finalScore}%`;
 
@@ -168,6 +200,12 @@
             : finalScore >= 50
             ? "Good attempt. Improve clarity."
             : "Needs improvement.";
+
+        softScoresEl.innerHTML = `
+          👀 Eye Contact: ${eyeContact}/10 <br/>
+          🧍 Body Language: ${bodyLanguage}/10 <br/>
+          📚 Vocabulary: ${vocabulary}/10
+        `;
 
         results.forEach((item, index) => {
           list.innerHTML += `
