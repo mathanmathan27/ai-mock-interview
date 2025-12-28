@@ -151,68 +151,154 @@
         document.body.classList.toggle("light");
       }
 
+      /* ===== FULL 50 MODEL ANSWERS ===== */
       const MODEL_ANSWERS = {
         "Tell me about yourself":
-          "My name is ____. I am from ____. I recently completed my studies and I am eager to start my career.",
+          "My name is ___ and I am from ___. I recently completed my education and developed a strong interest in learning new technologies. I enjoy problem-solving and continuous self-improvement. I am disciplined, motivated, and goal-oriented. I am looking for an opportunity to grow professionally.",
+
         "What are your strengths?":
-          "My strengths include communication skills, adaptability, and willingness to learn.",
+          "My strengths include adaptability, quick learning, and dedication. I work well in team environments and communicate clearly. I am good at managing my time and meeting deadlines. I stay calm under pressure. I always try to give my best effort.",
+
         "What are your weaknesses?":
-          "I sometimes overthink, but I am improving my time management skills.",
+          "One of my weaknesses is being too focused on perfection. I am learning to balance quality and time effectively. I take feedback positively. I continuously work on self-improvement. This helps me grow professionally.",
+
         "Why should we hire you?":
-          "I am hardworking, motivated, and eager to contribute.",
+          "I am hardworking and eager to learn. I adapt quickly to new challenges. I take responsibility for my work. I believe in teamwork and honesty. I am committed to contributing positively to the organization.",
+
         "Where do you see yourself in five years?":
-          "I see myself growing professionally and taking more responsibility.",
+          "In five years, I see myself as a skilled professional. I want to gain strong industry experience. I aim to take on more responsibilities. I plan to grow technically and personally. I want to contribute to organizational success.",
+
         "Describe a challenge you faced":
-          "Managing deadlines taught me better planning.",
-        "How do you handle pressure?": "I stay calm and focus on solutions.",
-        "What motivates you?": "Learning new skills and achieving goals.",
-        "Tell me about a failure": "I learned valuable lessons from failure.",
+          "I once faced difficulty managing multiple tasks. I created a priority list to manage time. I stayed focused and organized. This helped me complete tasks efficiently. The experience improved my planning skills.",
+
+        "How do you handle pressure?":
+          "I handle pressure by staying calm and focused. I break tasks into smaller steps. Planning helps me manage workload. I avoid panic and stay confident. Pressure motivates me to perform better.",
+
+        "What motivates you?":
+          "Learning new things motivates me. Achieving goals gives me satisfaction. Feedback helps me improve. Challenges push me forward. Growth keeps me inspired.",
+
+        "Tell me about a failure":
+          "I once failed due to poor planning. I analyzed what went wrong. I learned from my mistakes. I improved my approach next time. Failure helped me become more responsible.",
+
         "What are your career goals?":
-          "To grow and become skilled in my field.",
-        "How do you handle criticism?": "I take it positively and improve.",
+          "My goal is to build a stable career. I want to enhance my technical skills. I aim to gain industry experience. I want to take leadership roles. Long-term growth is important to me.",
+
+        "How do you handle criticism?":
+          "I accept criticism positively. I see it as an opportunity to improve. I analyze feedback carefully. I work on my weak areas. This helps me grow continuously.",
+
         "What do you know about our company?":
-          "Your company values innovation and quality.",
+          "Your company has a strong reputation in the industry. It focuses on innovation and quality. I admire its work culture. The company values growth and learning. I want to contribute to its success.",
+
         "Why did you choose this field?":
-          "I enjoy problem-solving and learning.",
-        "How do you manage time?": "By prioritizing tasks.",
-        "What is your biggest achievement?": "Completing my academic projects.",
+          "I chose this field because of my interest. I enjoy learning related skills. It allows continuous growth. The field offers new challenges. I feel motivated working in it.",
+
+        "How do you manage time?":
+          "I plan my tasks in advance. I set priorities. I avoid procrastination. I follow schedules strictly. Time management helps me stay productive.",
+
+        "What is your biggest achievement?":
+          "Completing my projects successfully is my biggest achievement. I stayed consistent and focused. I learned many skills. It boosted my confidence. It prepared me for real-world challenges.",
+
         "Describe teamwork experience":
-          "I collaborated effectively with team members.",
+          "I have worked in team projects. I communicate openly with team members. I support others when needed. Teamwork improves efficiency. Collaboration helps achieve better results.",
+
         "How do you solve problems?":
-          "By analyzing and finding logical solutions.",
-        "Are you a leader or follower?": "I can adapt to both roles.",
-        "How do you handle conflicts?": "Through calm communication.",
-        "What makes you unique?": "My positive attitude.",
-        "What are your hobbies?": "Learning, reading, and music.",
-        "How do you learn new skills?": "Practice and online resources.",
-        "What are your short-term goals?": "Gain practical experience.",
-        "What are your long-term goals?": "Become an expert.",
-        "How do you stay motivated?": "Setting goals.",
-        "Describe your work ethic": "Disciplined and responsible.",
-        "How do you adapt to change?": "By staying flexible.",
-        "What inspires you?": "Success stories.",
-        "How do you handle deadlines?": "Planning ahead.",
-        "How do you handle stress?": "Staying organized.",
-        "What do you expect from this role?": "Growth and learning.",
+          "I analyze the problem carefully. I break it into parts. I explore possible solutions. I choose the best approach. I verify results after implementation.",
+
+        "Are you a leader or follower?":
+          "I can be both when needed. I take responsibility as a leader. I follow guidance when required. I respect teamwork. Flexibility is my strength.",
+
+        "How do you handle conflicts?":
+          "I handle conflicts calmly. I listen to all perspectives. I communicate respectfully. I focus on solutions. Mutual understanding is important.",
+
+        "What makes you unique?":
+          "My dedication makes me unique. I am always eager to learn. I adapt quickly. I stay positive during challenges. I continuously improve myself.",
+
+        "What are your hobbies?":
+          "My hobbies include learning new skills. I enjoy reading and exploring technology. I like problem-solving. Hobbies refresh my mind. They improve creativity.",
+
+        "How do you learn new skills?":
+          "I learn through practice and consistency. I use online resources. I apply what I learn. I seek feedback. Continuous learning is my habit.",
+
+        "What are your short-term goals?":
+          "My short-term goal is gaining experience. I want to improve my skills. I aim to perform well. I want to learn industry standards. Growth is my focus.",
+
+        "What are your long-term goals?":
+          "My long-term goal is career stability. I want leadership responsibilities. I aim to become an expert. I want to contribute to innovation. Growth matters to me.",
+
+        "How do you stay motivated?":
+          "I set clear goals. I track progress. I celebrate small achievements. Challenges inspire me. Motivation keeps me focused.",
+
+        "Describe your work ethic":
+          "I believe in honesty and discipline. I respect deadlines. I give my best effort. I take responsibility seriously. Quality work is important to me.",
+
+        "How do you adapt to change?":
+          "I accept change positively. I learn new methods. I stay flexible. Adaptability helps growth. Change improves skills.",
+
+        "What inspires you?":
+          "Success stories inspire me. Learning inspires growth. Challenges motivate improvement. Hard work inspires discipline. Progress keeps me inspired.",
+
+        "How do you handle deadlines?":
+          "I plan tasks early. I avoid last-minute stress. I prioritize important work. I stay disciplined. Deadlines keep me focused.",
+
+        "How do you handle stress?":
+          "I stay calm under stress. I organize tasks. I take short breaks. Planning reduces stress. Positive thinking helps.",
+
+        "What do you expect from this role?":
+          "I expect learning opportunities. I want growth and challenges. I seek responsibility. I want to improve skills. I aim to contribute effectively.",
+
         "What kind of work environment do you prefer?":
-          "Collaborative environment.",
-        "How do you prioritize tasks?": "Based on importance.",
-        "Describe your communication skills": "Clear and effective.",
-        "How do you deal with failure?": "Learn and improve.",
-        "What is your ideal job?": "A role with growth.",
-        "What do you do under pressure?": "Focus on solutions.",
-        "How do you define success?": "Achieving goals.",
-        "Why should we trust you?": "I am honest.",
-        "How do you improve yourself?": "Continuous learning.",
-        "What are your technical skills?": "Programming basics.",
-        "How do you stay organized?": "Task lists.",
-        "Describe a difficult decision": "Managing priorities.",
-        "How do you handle mistakes?": "Correct and learn.",
-        "What are your values?": "Honesty and respect.",
-        "What does teamwork mean to you?": "Working together.",
-        "How do you manage expectations?": "Clear communication.",
-        "What are you passionate about?": "Learning.",
-        "Why do you want this job?": "Professional growth.",
+          "I prefer a positive environment. Team collaboration matters. Open communication is important. Learning culture motivates me. Respect improves productivity.",
+
+        "How do you prioritize tasks?":
+          "I list tasks by importance. I focus on deadlines. I manage time wisely. Planning helps execution. Prioritization improves efficiency.",
+
+        "Describe your communication skills":
+          "I communicate clearly and respectfully. I listen actively. I express ideas confidently. Communication avoids misunderstandings. It improves teamwork.",
+
+        "How do you deal with failure?":
+          "I analyze failures calmly. I learn lessons. I improve strategies. Failure builds experience. Growth follows mistakes.",
+
+        "What is your ideal job?":
+          "My ideal job offers growth. It challenges my skills. Learning is continuous. Teamwork is valued. Contribution matters.",
+
+        "What do you do under pressure?":
+          "I stay calm and focused. I prioritize tasks. I avoid panic. Planning helps control pressure. Pressure improves performance.",
+
+        "How do you define success?":
+          "Success means continuous improvement. Achieving goals matters. Learning from failures counts. Growth defines success. Satisfaction is important.",
+
+        "Why should we trust you?":
+          "I am honest and responsible. I respect commitments. I communicate openly. I take accountability seriously. Trust builds success.",
+
+        "How do you improve yourself?":
+          "I learn daily. I seek feedback. I practice consistently. I analyze mistakes. Improvement is ongoing.",
+
+        "What are your technical skills?":
+          "I have foundational technical skills. I keep learning new tools. I practice regularly. I improve through projects. Skills grow with experience.",
+
+        "How do you stay organized?":
+          "I plan daily tasks. I use schedules. I maintain priorities. Organization saves time. Discipline keeps me efficient.",
+
+        "Describe a difficult decision":
+          "I analyze all options carefully. I consider consequences. I seek advice if needed. I choose logically. Decisions build experience.",
+
+        "How do you handle mistakes?":
+          "I accept mistakes honestly. I correct them quickly. I learn lessons. Mistakes improve skills. Responsibility matters.",
+
+        "What are your values?":
+          "Honesty is my core value. Discipline guides me. Respect matters. Responsibility is important. Values define character.",
+
+        "What does teamwork mean to you?":
+          "Teamwork means collaboration. Supporting each other matters. Communication is key. Shared goals unite teams. Success is collective.",
+
+        "How do you manage expectations?":
+          "I communicate clearly. I set realistic goals. I manage time properly. Transparency avoids issues. Expectations guide performance.",
+
+        "What are you passionate about?":
+          "I am passionate about learning. I enjoy skill development. Problem-solving excites me. Growth motivates me. Passion drives success.",
+
+        "Why do you want this job?":
+          "This role aligns with my goals. It offers learning opportunities. I admire the organization. I want to contribute. Growth motivates me.",
       };
 
       const results =
